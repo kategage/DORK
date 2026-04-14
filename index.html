@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DORK 2.0 — Vote Distribution Analysis</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: #f7f5f0;
+    color: #1a1a18;
+    padding: 2rem 1.5rem 3rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+    color: #1a1a18;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: #888780;
+    margin-bottom: 1.75rem;
+    font-style: italic;
+  }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .metric {
+    background: #eeecea;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+
+  .metric-label { font-size: 11px; color: #888780; margin-bottom: 3px; font-family: sans-serif; }
+  .metric-value { font-size: 22px; font-weight: bold; color: #1a1a18; font-family: sans-serif; }
+  .metric-sub { font-size: 11px; color: #aaa9a4; margin-top: 1px; font-family: sans-serif; }
+
+  .legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: #888780;
+    margin-bottom: 1rem;
+    font-family: sans-serif;
+  }
+
+  .leg-swatch {
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-left: 4px;
+    vertical-align: middle;
+    font-family: sans-serif;
+  }
+  .tag-winner    { background: #FAEEDA; color: #633806; }
+  .tag-pm        { background: #FAECE7; color: #712B13; }
+  .tag-consensus { background: #E1F5EE; color: #085041; }
+
+  .round-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #888780;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin: 1.5rem 0 0.5rem;
+    font-family: sans-serif;
+  }
+
+  .song-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .song-name {
+    font-size: 12px;
+    color: #1a1a18;
+    width: 240px;
+    flex-shrink: 0;
+    font-family: sans-serif;
+    line-height: 1.4;
+  }
+  .song-name.winner { font-weight: bold; }
+
+  .bar-wrap {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    height: 22px;
+    margin-top: 2px;
+  }
+
+  .vote-block {
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 2px;
+    min-width: 14px;
+    flex-shrink: 0;
+    font-family: sans-serif;
+  }
+  .v1 { background: #B4B2A9; }
+  .v2 { background: #7F77DD; }
+  .v3 { background: #534AB7; }
+  .v4 { background: #3C3489; }
+  .v5 { background: #26215C; }
+
+  .total-label {
+    font-size: 12px;
+    color: #888780;
+    width: 48px;
+    text-align: right;
+    flex-shrink: 0;
+    font-family: sans-serif;
+    margin-top: 2px;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid #dddbd6;
+    margin: 1rem 0 0.5rem;
+  }
+
+  .summary-note {
+    font-size: 13px;
+    color: #5f5e5a;
+    line-height: 1.65;
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: #eeecea;
+    border-radius: 8px;
+    font-family: sans-serif;
+  }
+
+  .summary-note strong { color: #1a1a18; }
+</style>
+</head>
+<body>
+
+<h1>DORK 2.0 — Vote Distribution Shape</h1>
+<p class="subtitle">Does the winning song win on passion or consensus?</p>
+
+<div class="metric-row">
+  <div class="metric">
+    <div class="metric-label">R3 winner max single vote</div>
+    <div class="metric-value">2</div>
+    <div class="metric-sub">Farmer's Hotel — nobody's #1</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Street Hassle max single vote</div>
+    <div class="metric-value">5</div>
+    <div class="metric-sub">Lost with 4 voters, 3.0 avg</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">R2 winner max single vote</div>
+    <div class="metric-value">4</div>
+    <div class="metric-sub">Car Seat — high passion + breadth</div>
+  </div>
+</div>
+
+<div class="legend">
+  <span><span class="leg-swatch" style="background:#B4B2A9"></span>1 pt</span>
+  <span><span class="leg-swatch" style="background:#7F77DD"></span>2 pts</span>
+  <span><span class="leg-swatch" style="background:#534AB7"></span>3 pts</span>
+  <span><span class="leg-swatch" style="background:#3C3489"></span>4 pts</span>
+  <span><span class="leg-swatch" style="background:#26215C"></span>5 pts</span>
+  <span style="margin-left:8px;"><span class="tag tag-winner">winner</span> round winner</span>
+  <span><span class="tag tag-pm">passionate minority</span> high intensity, lost on breadth</span>
+  <span><span class="tag tag-consensus">consensus pick</span> among most-voted songs in this round</span>
+</div>
+
+<div class="round-label">Round 1 — Circa 2004</div>
+<div id="r1"></div>
+
+<hr class="divider">
+<div class="round-label">Round 2 — Drugs are Awesome</div>
+<div id="r2"></div>
+
+<hr class="divider">
+<div class="round-label">Round 3 — Songs from an Italian Restaurant</div>
+<div id="r3"></div>
+
+<div class="summary-note" id="summary"></div>
+
+<script>
+const ELIGIBLE = 8;
+
+const rounds = [
+  {
+    id: 'r1',
+    songs: [
+      { name: "Anthems for a 17-Yr-Old Girl",   winner: true,  pm: false, votes: [4,2,2,2,1] },
+      { name: "Farewell Transmission",           winner: false, pm: false, votes: [4,2,2,1,1] },
+      { name: "The Rat",                         winner: false, pm: false, votes: [3,3,2,2] },
+      { name: "Modern Girls & Old Fashion Men",  winner: false, pm: false, votes: [4,2,1,1] },
+      { name: "Vincent O'Brien",                 winner: false, pm: false, votes: [3,2,2] },
+      { name: "Heartbeat",                       winner: false, pm: false, votes: [3,1,1,1] },
+      { name: "Hounds of Love",                  winner: false, pm: false, votes: [3,2,1] },
+      { name: "Bowl of Oranges",                 winner: false, pm: true,  votes: [4,2] },
+      { name: "PSA Interlude",                   winner: false, pm: false, votes: [2,1,1,1] },
+      { name: "Neighborhood #1 (Tunnels)",       winner: false, pm: false, votes: [2,1,1,1] },
+      { name: "Take Your Mama",                  winner: false, pm: false, votes: [2,1,1] },
+      { name: "Taper Jean Girl",                 winner: false, pm: true,  votes: [3,1] },
+      { name: "Smile Like You Mean It",          winner: false, pm: false, votes: [1,1,1] },
+      { name: "Smash Your Head",                 winner: false, pm: false, votes: [1,1,1] },
+      { name: "Tuff Ghost",                      winner: false, pm: false, votes: [1] },
+      { name: "Can't Stand Me Now",              winner: false, pm: false, votes: [1] },
+    ]
+  },
+  {
+    id: 'r2',
+    songs: [
+      { name: "Joe Gets Kicked Out…",           winner: true,  pm: false, votes: [4,4,3,2,2,2,2,1] },
+      { name: "Take Pills",                     winner: false, pm: false, votes: [3,3,2,2,2,1,1,1] },
+      { name: "Golden Brown",                   winner: false, pm: false, votes: [3,3,3,2,2,1,1] },
+      { name: "Street Hassle",                  winner: false, pm: true,  votes: [5,3,3,1] },
+      { name: "Grindin'",                       winner: false, pm: false, votes: [4,2,2,1,1] },
+      { name: "Heroin",                         winner: false, pm: false, votes: [3,1,1,1] },
+      { name: "Dead Flowers",                   winner: false, pm: false, votes: [2,2,1] },
+      { name: "Under the Bridge",               winner: false, pm: false, votes: [2,1,1] },
+      { name: "Cortez the Killer",              winner: false, pm: false, votes: [1,1,1] },
+    ]
+  },
+  {
+    id: 'r3',
+    songs: [
+      { name: "The Farmer's Hotel",               winner: true,  pm: false, votes: [2,2,1,1,1] },
+      { name: "T.B. Sheets",                      winner: false, pm: false, votes: [3,1,1,1] },
+      { name: "Poncho & Lefty",                   winner: false, pm: false, votes: [2,2,1,1] },
+      { name: "Olympia, WA",                      winner: false, pm: false, votes: [2,1,1,1] },
+      { name: "San Francisco Bay",                winner: false, pm: false, votes: [3,1,1] },
+      { name: "Smoke on the Water",               winner: false, pm: false, votes: [3,1,1] },
+      { name: "I Was Dancing in the Lesbian Bar", winner: false, pm: false, votes: [2,2,1] },
+      { name: "Lily, Rosemary…",                  winner: false, pm: false, votes: [1,1,1,1] },
+      { name: "Blood Bank",                       winner: false, pm: false, votes: [2,1,1] },
+      { name: "Garden Party",                     winner: false, pm: false, votes: [2,1,1] },
+      { name: "Down on the Corner",               winner: false, pm: false, votes: [2,2] },
+      { name: "Speed Trap Town",                  winner: false, pm: false, votes: [1,1,1] },
+      { name: "Highway Patrolman",                winner: false, pm: false, votes: [2,1] },
+      { name: "Feelin' Good Again",               winner: false, pm: false, votes: [1,1] },
+      { name: "Brandy",                           winner: false, pm: false, votes: [2,1,1] },
+      { name: "Copacabana",                       winner: false, pm: false, votes: [1,1,1] },
+    ]
+  }
+];
+
+function vClass(v) {
+  if (v >= 5) return 'v5';
+  if (v === 4) return 'v4';
+  if (v === 3) return 'v3';
+  if (v === 2) return 'v2';
+  return 'v1';
+}
+
+const PX_PER_PT = 18;
+
+rounds.forEach(round => {
+  const container = document.getElementById(round.id);
+  const maxVoters = Math.max(...round.songs.map(s => s.votes.length));
+  round.songs.forEach(song => {
+    const sorted = [...song.votes].sort((a,b) => b-a);
+    const total = sorted.reduce((a,b)=>a+b,0);
+    const isConsensus = song.votes.length >= maxVoters - 1;
+
+    const row = document.createElement('div');
+    row.className = 'song-row';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'song-name' + (song.winner ? ' winner' : '');
+    nameEl.title = song.name;
+    let nameHTML = song.name;
+    if (song.winner)    nameHTML += '<span class="tag tag-winner">winner</span>';
+    if (song.pm)        nameHTML += '<span class="tag tag-pm">passionate minority</span>';
+    if (isConsensus)    nameHTML += '<span class="tag tag-consensus">consensus pick</span>';
+    nameEl.innerHTML = nameHTML;
+
+    const barWrap = document.createElement('div');
+    barWrap.className = 'bar-wrap';
+
+    sorted.forEach(v => {
+      const block = document.createElement('div');
+      block.className = 'vote-block ' + vClass(v);
+      block.style.width = (v * PX_PER_PT) + 'px';
+      block.textContent = v;
+      barWrap.appendChild(block);
+    });
+
+    const totalEl = document.createElement('div');
+    totalEl.className = 'total-label';
+    totalEl.textContent = total + ' pts';
+
+    row.appendChild(nameEl);
+    row.appendChild(barWrap);
+    row.appendChild(totalEl);
+    container.appendChild(row);
+  });
+});
+
+document.getElementById('summary').innerHTML = `
+  <strong>The answer: it depends on the round, but the system does have a consensus bias.</strong><br><br>
+  R1 winner (Anthems) won with one big vote (4) plus four mid-range — a mix. R2 winner (Car Seat) is the exception: it had real passion <em>and</em> breadth — two 4s, a 3, and five smaller votes. That's genuinely deserved. But R3 winner (Farmer's Hotel) is exactly the hypothesis confirmed: [2,2,1,1,1] — nobody's favorite, everybody's acceptable. Street Hassle had a max vote of 5 and avg of 3.0 and still lost, purely because only 4 people voted for it. The system doesn't punish passion — but it does reward showing up on more ballots, and that structurally favors the song nobody hates over the song a few people love.
+`;
+</script>
+</body>
+</html>
