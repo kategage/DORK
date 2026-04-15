@@ -199,21 +199,25 @@
   <span><span class="tag tag-consensus">consensus pick</span> among most-voted songs in this round</span>
 </div>
 
-<div class="round-label">Round 1 — Circa 2004</div>
+<div class="round-label">DORK 2.0 — Round 1: Circa 2004</div>
 <div id="r1"></div>
 
 <hr class="divider">
-<div class="round-label">Round 2 — Drugs are Awesome</div>
+<div class="round-label">DORK 2.0 — Round 2: Drugs are Awesome</div>
 <div id="r2"></div>
 
 <hr class="divider">
-<div class="round-label">Round 3 — Songs from an Italian Restaurant</div>
+<div class="round-label">DORK 2.0 — Round 3: Songs from an Italian Restaurant</div>
 <div id="r3"></div>
+
+<hr class="divider">
+<div class="round-label">DORK 3.0 — Round 1: Regal Cinema Crown Club</div>
+<div id="d3r1"></div>
 
 <div class="summary-note" id="summary"></div>
 
 <script>
-const ELIGIBLE = 8;
+const ELIGIBLE = { r1: 8, r2: 8, r3: 8, d3r1: 11 };
 
 const rounds = [
   {
@@ -249,6 +253,23 @@ const rounds = [
       { name: "Dead Flowers",                   winner: false, pm: false, votes: [2,2,1] },
       { name: "Under the Bridge",               winner: false, pm: false, votes: [2,1,1] },
       { name: "Cortez the Killer",              winner: false, pm: false, votes: [1,1,1] },
+    ]
+  },
+  {
+    id: 'd3r1',
+    songs: [
+      { name: "(Everything I Do) I Do It For You", winner: true,  pm: false, votes: [4,3,3,3,3,2,2,1] },
+      { name: "The King of Wishful Thinking",      winner: false, pm: false, votes: [4,4,3,2,1,1,1] },
+      { name: "The Killing Moon",                  winner: false, pm: false, votes: [4,3,2,2,1,1,1,1] },
+      { name: "Can't Take My Eyes off You",        winner: false, pm: false, votes: [4,3,2,1,1] },
+      { name: "Kids in America",                   winner: false, pm: false, votes: [4,4,2,1] },
+      { name: "These Eyes",                        winner: false, pm: false, votes: [2,2,2,2,1,1] },
+      { name: "Miserlou",                          winner: false, pm: false, votes: [4,2,2,1,1] },
+      { name: "Under the Milky Way",               winner: false, pm: false, votes: [3,2,1,1] },
+      { name: "Somebody's Baby",                   winner: false, pm: false, votes: [4,2,1] },
+      { name: "Twist And Shout",                   winner: false, pm: false, votes: [1,1,1,1,1] },
+      { name: "Oh Yeah",                           winner: false, pm: false, votes: [3,2] },
+      { name: "Darling Nikki",                     winner: false, pm: false, votes: [1,1] },
     ]
   },
   {
