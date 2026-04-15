@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DORK 2.0 — Vote Distribution Analysis</title>
+<title>DORK 2.0 + 3.0 — Vote Distribution Analysis</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -167,24 +167,24 @@
 </head>
 <body>
 
-<h1>DORK 2.0 — Vote Distribution Shape</h1>
+<h1>DORK 2.0 + 3.0 — Vote Distribution Shape</h1>
 <p class="subtitle">Does the winning song win on passion or consensus?</p>
 
 <div class="metric-row">
   <div class="metric">
-    <div class="metric-label">R3 winner max single vote</div>
+    <div class="metric-label">Clearest consensus winner</div>
     <div class="metric-value">2</div>
-    <div class="metric-sub">Farmer's Hotel — nobody's #1</div>
+    <div class="metric-sub">Farmer's Hotel max vote — nobody's #1</div>
   </div>
   <div class="metric">
-    <div class="metric-label">Street Hassle max single vote</div>
+    <div class="metric-label">Clearest passionate minority</div>
     <div class="metric-value">5</div>
-    <div class="metric-sub">Lost with 4 voters, 3.0 avg</div>
+    <div class="metric-sub">Street Hassle max vote — lost on breadth</div>
   </div>
   <div class="metric">
-    <div class="metric-label">R2 winner max single vote</div>
+    <div class="metric-label">D3.0 R1 winner max vote</div>
     <div class="metric-value">4</div>
-    <div class="metric-sub">Car Seat — high passion + breadth</div>
+    <div class="metric-sub">(Everything I Do) — passion + breadth</div>
   </div>
 </div>
 
@@ -262,11 +262,11 @@ const rounds = [
       { name: "The King of Wishful Thinking",      winner: false, pm: false, votes: [4,4,3,2,1,1,1] },
       { name: "The Killing Moon",                  winner: false, pm: false, votes: [4,3,2,2,1,1,1,1] },
       { name: "Can't Take My Eyes off You",        winner: false, pm: false, votes: [4,3,2,1,1] },
-      { name: "Kids in America",                   winner: false, pm: false, votes: [4,4,2,1] },
+      { name: "Kids in America",                   winner: false, pm: true,  votes: [4,4,2,1] },
       { name: "These Eyes",                        winner: false, pm: false, votes: [2,2,2,2,1,1] },
       { name: "Miserlou",                          winner: false, pm: false, votes: [4,2,2,1,1] },
       { name: "Under the Milky Way",               winner: false, pm: false, votes: [3,2,1,1] },
-      { name: "Somebody's Baby",                   winner: false, pm: false, votes: [4,2,1] },
+      { name: "Somebody's Baby",                   winner: false, pm: true,  votes: [4,2,1] },
       { name: "Twist And Shout",                   winner: false, pm: false, votes: [1,1,1,1,1] },
       { name: "Oh Yeah",                           winner: false, pm: false, votes: [3,2] },
       { name: "Darling Nikki",                     winner: false, pm: false, votes: [1,1] },
@@ -348,8 +348,10 @@ rounds.forEach(round => {
 });
 
 document.getElementById('summary').innerHTML = `
-  <strong>The answer: it depends on the round, but the system does have a consensus bias.</strong><br><br>
-  R1 winner (Anthems) won with one big vote (4) plus four mid-range — a mix. R2 winner (Car Seat) is the exception: it had real passion <em>and</em> breadth — two 4s, a 3, and five smaller votes. That's genuinely deserved. But R3 winner (Farmer's Hotel) is exactly the hypothesis confirmed: [2,2,1,1,1] — nobody's favorite, everybody's acceptable. Street Hassle had a max vote of 5 and avg of 3.0 and still lost, purely because only 4 people voted for it. The system doesn't punish passion — but it does reward showing up on more ballots, and that structurally favors the song nobody hates over the song a few people love.
+  <strong>The answer across 4 rounds: the system has a consensus bias, but it shows up unevenly.</strong><br><br>
+  <strong>DORK 2.0:</strong> The Farmer's Hotel (R3) is the starkest case — [2,2,1,1,1], nobody's favorite, everybody's acceptable. Street Hassle is the defining passionate minority: a max vote of 5, avg of 3.0, and it still lost because only 4 people voted for it at all. Car Seat Headrest (R2) is the counterexample — it had genuine passion AND breadth, a deserved winner by any measure.<br><br>
+  <strong>DORK 3.0 R1:</strong> "(Everything I Do) I Do It For You" wins with the most voters in the round (8 of 11 eligible) and solid intensity — [4,3,3,3,3,2,2,1]. That's a healthy result: broad and reasonably loved. The passionate minority story here is Kids in America — two people gave it 4 points each but only 4 voters total showed up for it. Somebody's Baby is similar: one person dumped 4 points on it, only 3 voters total. With 11 eligible voters, low breadth hurts even more than in DORK 2.0.<br><br>
+  The pattern holds across all four rounds: abstention is costless, and that structurally advantages the song nobody hates over the song a few people love.
 `;
 </script>
 </body>
